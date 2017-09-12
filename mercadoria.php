@@ -1,43 +1,23 @@
 <?php include('include/header.php'); ?>
+<?php include('conexao.php'); ?>
+<?php 
+function listaMercadorias($conexao) {
+	$mercadorias = array();
+	$resultado = mysqli_query($conexao, "select * from mercadorias");
 
-<table>
-	<thead>
-		<tr>
-			<th>Código</th>
-			<th>Tipo</th>
-			<th>Nome</th>
-			<th>Quantidade</th>
-			<th>Preço</th>
-			<th>Negócios</th>
-		</tr>
-	</thead>
-	<tbody class="table-body">
-	</tbody>
-</table>
+	while($mercadoria = mysqli_fetch_assoc($resultado)) {
+		array_push($mercadorias, $mercadoria);
+	}
 
-<script>
-	$.ajax({
-		method: "GET",
-		url: "/api/mercadoria",
-		dataType: "json"
-	}).done(function(res){
-		$(".table-body").html("");
-		res.forEach(function(item){
-			 $(".table-body").append(
-			 	$("<tr>").append(
-			 		$("<td>").html(item.cod_merc), 
-			 		$("<td>").html(item.tipo_merc), 
-			 		$("<td>").html(item.nome_merc), 
-			 		$("<td>").html(item.qtd_merc), 
-			 		$("<td>").html(item.preco_merc), 
-			 		$("<td>").html(item.tipo_neg)
-			 	)
-			 )
-		});
-	});
+	return $mercadorias;
 
-</script>
+}
 
+$mercadorias = listaMercadorias($conexao);
+foreach ($mercadorias as $mercadoria) {
+	echo $mercadoria['nome_merc'] . "</br>";
+}
 
+?>
 
 <?php include('include/footer.php'); ?>
